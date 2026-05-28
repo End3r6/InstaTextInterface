@@ -20,6 +20,14 @@ def sms():
         reply = "pong"
     elif body == "ig":
         reply = "Instagram helper connected."
+    elif body == "pic":
+        xml = """<?xml version="1.0" encoding="UTF-8"?>
+<Response>
+    <Message>
+        <Body>Here is the test picture.</Body>
+        <Media>https://instatextinterface.onrender.com/static/ig.jpeg</Media>
+    </Message>
+</Response>"""
     else:
         reply = "Commands: ping, ig"
 
@@ -29,3 +37,6 @@ def sms():
 </Response>"""
 
     return Response(xml, mimetype="text/xml")
+
+
+#  +12029155212

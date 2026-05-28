@@ -3,6 +3,8 @@ from base_bot_app import BaseBotApp
 
 
 class SongDownloader(BaseBotApp):
+    name = "Song Downloader"
+    description = "The app to download songs"
     def execute(self, args, options):
         return "Downloading song!!"
 

@@ -63,6 +63,7 @@ def sms():
 
         if args[0] == "quit":
             bot_state = BotState.NEUTRAL
+            app_instance = None
             return sms_reply(f"Quitting app: {app_instance.name}")
 
         app_execute_results = app_instance.execute(args, options)

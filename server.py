@@ -20,16 +20,6 @@ def sms():
         reply = "pong"
     elif body == "ig":
         reply = "Instagram helper connected."
-    elif body == "pic":
-        xml = """<?xml version="1.0" encoding="UTF-8"?>
-<Response>
-    <Message>
-        <Body>Here is the test picture.</Body>
-        <Media>https://instatextinterface.onrender.com/static/ig.jpeg</Media>
-    </Message>
-</Response>"""
-
-        return Response(xml, mimetype="text/xml")
     else:
         reply = "Commands: ping, ig"
 
@@ -40,5 +30,12 @@ def sms():
 
     return Response(xml, mimetype="text/xml")
 
+@app.route("/low_balance", methods=["POST"])
+def low_balance():
+    
+    xml = f"""<?xml version="1.0" encoding="UTF-8"?>
+<Response>
+    <Message>You have gone below the 5$ balance, adding more MONEYSSSSSS</Message>
+</Response>"""
 
-#  +12029155212
+    return Response(xml, mimetype="text/xml")

@@ -1,3 +1,3 @@
 Flask
 gunicorn
-yt_dlp
+yt-dlp>=2025.01.01

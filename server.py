@@ -1,41 +1,71 @@
 from flask import Flask, request, Response
+from command_system import CommandContext, parse_message
 import os
+from enum import Enum
+from song_downloader import SongDownloader
+
+
+class BotState(Enum):
+    NUETRAL = 1
+    USING_APP = 2
 
 app = Flask(__name__)
 
 MY_PHONE = os.getenv("MY_PHONE")
 
+bot_state = BotState.NUETRAL
+
+app_map = {
+    "song_downloader" : SongDownloader
+    }
+
+app_instance = None
+
+def sms_reply(text):
+    xml = f"""<?xml version="1.0" encoding="UTF-8"?>
+<Response>
+    <Message>{text}</Message>
+</Response>"""
+    return Response(xml, mimetype="text/xml")
+
 @app.route("/", methods=["GET"])
 def home():
     return "Instagram helper server is running."
 
+@app.route("/low_balance", methods=["POST"])
+def low_balance():
+    return sms_reply("You have gone below the 5$ balance, adding more MONEYSSSSSS")
+
 @app.route("/sms", methods=["POST"])
 def sms():
     from_number = request.form.get("From")
+    if MY_PHONE and from_number != MY_PHONE:
+        return sms_reply("Unauthorized.")
+
     body = request.form.get("Body", "").strip().lower()
 
-    if MY_PHONE and from_number != MY_PHONE:
-        reply = "Unauthorized."
-    elif body == "ping":
-        reply = "pong"
-    elif body == "ig":
-        reply = "Instagram helper connected."
-    else:
-        reply = "Commands: ping, ig"
+    args, options = parse_message(body)
 
-    xml = f"""<?xml version="1.0" encoding="UTF-8"?>
-<Response>
-    <Message>{reply}</Message>
-</Response>"""
+    if bot_state == BotState.NUETRAL:
+        if len(args) >= 2 and args[0] == "use":
+            app_name = args[1]
 
-    return Response(xml, mimetype="text/xml")
+            app_instance = app_map[app_name]
+            bot_state = BotState.USING_APP
+            return sms_reply(f"Using {app_name}. Type help for commands.")
 
-@app.route("/low_balance", methods=["POST"])
-def low_balance():
+        return sms_reply("Neutral mode. Type: use song_downloader")
     
-    xml = f"""<?xml version="1.0" encoding="UTF-8"?>
-<Response>
-    <Message>You have gone below the 5$ balance, adding more MONEYSSSSSS</Message>
-</Response>"""
+    if bot_state == BotState.USING_APP:
 
-    return Response(xml, mimetype="text/xml")
+        if args[0] == "quit":
+            bot_state = BotState.NUETRAL
+            return sms_reply(f"Quitting app: {app_instance.name}")
+
+        app_execute_results = app_instance.execute(args, options)
+
+        return sms_reply(app_execute_results)
+
+
+
+

@@ -41,11 +41,17 @@ class SongDownloader(BaseBotApp):
 
     def get_song(self, query):
         ydl_opts = {
-            "format": "bestaudio/best",
+            "format": "bestaudio",
             "outtmpl": "downloads/%(title)s.%(ext)s",
             "noplaylist": True,
             "default_search": "ytsearch1",
-            "cookiefile": "cookies.txt"
+            "cookiefile": "cookies.txt",
+            
+            "extractor_args": {
+                "youtube": {
+                    "player_client": ["android"]
+                }
+            }
         }
 
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:

@@ -21,6 +21,12 @@ app_map = {
 
 app_instance = None
 
+cookies = os.getenv("YOUTUBE_COOKIES")
+
+if cookies:
+    with open("cookies.txt", "w", encoding="utf-8") as f:
+        f.write(cookies)
+
 def sms_reply(text):
     xml = f"""<?xml version="1.0" encoding="UTF-8"?>
 <Response>

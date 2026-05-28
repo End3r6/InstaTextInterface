@@ -45,6 +45,7 @@ class SongDownloader(BaseBotApp):
             "outtmpl": "downloads/%(title)s.%(ext)s",
             "noplaylist": True,
             "default_search": "ytsearch1",
+            "cookiefile": "cookies.txt"
         }
 
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:

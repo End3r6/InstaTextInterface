@@ -28,6 +28,8 @@ def sms():
         <Media>https://instatextinterface.onrender.com/static/ig.jpeg</Media>
     </Message>
 </Response>"""
+
+        return Response(xml, mimetype="text/xml")
     else:
         reply = "Commands: ping, ig"
 

@@ -61,7 +61,7 @@ class TicTacToeApp(BaseBotApp):
         self.game.board.set_cell(cell_number, 1)
 
         #Bot Move
-        self.game.board.set_cell(self.get_random_move, 0)
+        self.game.board.set_cell(self.get_random_move(), 0)
 
         rendered_board = self.game.board.render()
         return rendered_board

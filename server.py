@@ -72,7 +72,11 @@ def sms():
             app_instance = None
             return sms_reply(f"Quitting app: {app_instance.name}")
 
-        app_execute_results = app_instance.execute(args, options)
+        try:
+            app_execute_results = app_instance.execute(args, options)
+
+        except Exception as e:
+            app_execute_results = f"Error: {str(e)}"
 
         return sms_reply(app_execute_results)
 

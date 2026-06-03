@@ -43,7 +43,8 @@ class SongDownloader(BaseBotApp):
     def get_song(self, query):
         results = Search(query)
 
-        url = results[0]
+        url = results.all[0].watch_url
+        print(url)
 
         yt = YouTube(url, on_progress_callback=on_progress)
         print(yt.title)

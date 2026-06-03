@@ -2,6 +2,7 @@ from base_bot_app import BaseBotApp
 from email_helper import email_file
 from pytubefix import YouTube, Search
 from pytubefix.cli import on_progress
+from swiftshadow.classes import ProxyInterface
 import os
 
 class SongDownloader(BaseBotApp):
@@ -50,12 +51,20 @@ class SongDownloader(BaseBotApp):
             return f"Failed to download/email song: {e}"
 
     def get_song(self, query):
+        proxy_https = ProxyInterface(protocol="https").get().as_string()
+        proxy_http = ProxyInterface(protocol="http").get().as_string()
+
+        proxy = {
+            "http": proxy_https,
+            "https": proxy_http
+        }
+
         results = Search(query)
 
         url = results.all[0].watch_url
         print(url)
 
-        yt = YouTube(url, client="WEB", on_progress_callback=on_progress)
+        yt = YouTube(url, proxies=proxy, client="WEB", on_progress_callback=on_progress)
         print(yt.title)
 
         ys = yt.streams.get_audio_only()

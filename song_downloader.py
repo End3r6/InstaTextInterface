@@ -29,12 +29,21 @@ class SongDownloader(BaseBotApp):
         try:
             file_path = self.get_song(query)
 
+            print("Song Found!")
+
+            print("Beginning Email...")
             email_file(
                 file_path,
                 subject=f"Song Download: {query}",
                 body=f'Here is the file for "{query}".'
             )
+
+            print("Email Sent!")
+
+            print("Deleting File...")
             os.remove(file_path)  # Delete the file after emailing
+            print("File Deleted!")
+
             return f'Downloaded and emailed: "{query}"'
 
         except Exception as e:

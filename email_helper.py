@@ -9,6 +9,8 @@ def email_file(file_path, subject="File from bot", body="Attached file."):
     password = os.getenv("EMAIL_APP_PASSWORD")
     recipient = os.getenv("EMAIL_TO")
 
+    print(f"{sender} : {recipient}")
+
     msg = EmailMessage()
     msg["From"] = sender
     msg["To"] = recipient

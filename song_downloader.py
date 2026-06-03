@@ -64,7 +64,7 @@ class SongDownloader(BaseBotApp):
         url = results.all[0].watch_url
         print(url)
 
-        yt = YouTube(url, proxies=proxy, client="WEB", on_progress_callback=on_progress)
+        yt = YouTube(url, proxies=proxy, on_progress_callback=on_progress)
         print(yt.title)
 
         ys = yt.streams.get_audio_only()

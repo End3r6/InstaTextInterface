@@ -1,7 +1,8 @@
-import yt_dlp
 from base_bot_app import BaseBotApp
 from email_helper import email_file
-
+from pytubefix import YouTube, Search
+from pytubefix.cli import on_progress
+import os
 
 class SongDownloader(BaseBotApp):
     name = "Song Downloader"
@@ -33,29 +34,22 @@ class SongDownloader(BaseBotApp):
                 subject=f"Song Download: {query}",
                 body=f'Here is the file for "{query}".'
             )
-
+            os.remove(file_path)  # Delete the file after emailing
             return f'Downloaded and emailed: "{query}"'
 
         except Exception as e:
             return f"Failed to download/email song: {e}"
 
     def get_song(self, query):
-        ydl_opts = {
-            "format": "ba[ext=m4a]/ba[ext=webm]/bestaudio/best",
-            "outtmpl": "downloads/%(title)s.%(ext)s",
-            "noplaylist": True,
-            "default_search": "ytsearch1",
-            "cookiefile": "cookies.txt",
-            "listformats": True,
-            "ignoreerrors": False,
-        }
+        results = Search(query)
 
-        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            info = ydl.extract_info(query, download=True)
+        url = results[0]
 
+        yt = YouTube(url, on_progress_callback=on_progress)
+        print(yt.title)
 
-            if "entries" in info:
-                info = info["entries"][0]
+        ys = yt.streams.get_audio_only()
+        path = ys.download(output_path="./downloads/")
 
-            return ydl.prepare_filename(info)
-    
+        return path
+

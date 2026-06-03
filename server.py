@@ -3,6 +3,7 @@ from command_system import CommandContext, parse_message
 import os
 from enum import Enum
 from song_downloader import SongDownloader
+from tic_tac_toe_app import TicTacToeApp
 
 
 class BotState(Enum):
@@ -16,7 +17,8 @@ MY_PHONE = os.getenv("MY_PHONE")
 bot_state = BotState.NEUTRAL
 
 app_map = {
-    "song_downloader" : SongDownloader
+    # "song_downloader" : SongDownloader,
+    "tic_tac_toe": TicTacToeApp
     }
 
 app_instance = None

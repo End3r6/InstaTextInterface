@@ -51,20 +51,12 @@ class SongDownloader(BaseBotApp):
             return f"Failed to download/email song: {e}"
 
     def get_song(self, query):
-        proxy_https = ProxyInterface(protocol="https").get().as_string()
-        proxy_http = ProxyInterface(protocol="http").get().as_string()
-
-        proxy = {
-            "http": proxy_https,
-            "https": proxy_http
-        }
-
         results = Search(query)
 
         url = results.all[0].watch_url
         print(url)
 
-        yt = YouTube(url, proxies=proxy, on_progress_callback=on_progress)
+        yt = YouTube(url, on_progress_callback=on_progress)
         print(yt.title)
 
         ys = yt.streams.get_audio_only()

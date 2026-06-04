@@ -65,7 +65,7 @@ def sms():
             bot_state = BotState.USING_APP
             return sms_reply(f"Using {app_name}. Type help for commands.")
 
-        return sms_reply(f"No app recognized!\n\nType 'use <app_name>'")
+        return sms_reply(f"No app recognized!\n\nType 'use {[c for c in app_map.keys()]}'")
     
     if bot_state == BotState.USING_APP:
 

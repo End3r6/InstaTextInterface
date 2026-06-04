@@ -23,6 +23,20 @@ class Board:
     def set_cell(self, index, value):
         self.cells[index] = value
 
+    def get_cell(self, x, y):
+        cell_index = y * self.width + x
+        return self.cells[cell_index]
+    
+    def get_num_open_cells(self):
+        num_open_cells = 0
+        for cell in self.cells:
+            if cell == -1:
+                num_open_cells += 1
+
+    def reset_board(self):
+        for c in range(len(self.cells)):
+            self.cells[c] = -1
+
     def get_cell_display(self, cell):
         if cell == -1:
             return ' '
@@ -36,8 +50,45 @@ class Board:
 class TicTacToeGame:
     def __init__(self, board : Board):
         self.board : Board = board
-        
 
+    def evaluate_game(self):
+        if self.board == None:
+            return 0
+        
+        #check rows
+        for i in range(self.board.height):
+            if self.board.get_cell(0, i) == self.board.get_cell(1, i) and self.board.get_cell(1, i) == self.board.get_cell(2, i):
+                if self.board.get_cell(0, i) == 1:
+                    return 2 #O wins!
+                elif self.board.get_cell(0, i) == 0:
+                    return 1 #X wins!
+                
+        #check columns
+        for i in range(self.board.width):
+            if self.board.get_cell(i, 0) == self.board.get_cell(i, 1) and self.board.get_cell(i, 1) == self.board.get_cell(i, 2):
+                if self.board.get_cell(i, 0) == 1:
+                    return 2 #O wins!
+                elif self.board.get_cell(i, 0) == 0:
+                    return 1 #X wins!
+        
+        #check diagonals
+        if self.board.get_cell(0, 0) == self.board.get_cell(1, 1) and self.board.get_cell(1, 1) == self.board.get_cell(2, 2):
+            if self.board.get_cell(0, 0) == 1:
+                return 2 #O wins!
+            elif self.board.get_cell(0, 0) == 0:
+                return 1 #X wins!
+            
+        #check diagonals
+        if self.board.get_cell(2, 0) == self.board.get_cell(1, 1) and self.board.get_cell(1, 1) == self.board.get_cell(2, 0):
+            if self.board.get_cell(2, 0) == 1:
+                return 2 #O wins!
+            elif self.board.get_cell(2, 0) == 0:
+                return 1 #X wins!
+            
+        if self.board.get_num_open_cells() == 0:
+            return 0 #TIE!
+        
+        return -1 #Game is still going!
 
 class TicTacToeApp(BaseBotApp):
     name = "Tic Tac Toe"
@@ -64,7 +115,20 @@ class TicTacToeApp(BaseBotApp):
         self.game.board.set_cell(self.get_random_move(), 0)
 
         rendered_board = self.game.board.render()
-        return rendered_board
+
+        game_result = self.game.evaluate_game()
+
+        if game_result == -1:
+            return rendered_board
+        elif game_result == 0:
+            self.game.board.reset_board()
+            return f"Draw\n\n{rendered_board}"
+        elif game_result == 1:
+            self.game.board.reset_board()
+            return f"X won!\n\n{rendered_board}"
+        elif game_result == 2:
+            self.game.board.reset_board()
+            return f"O won!\n\n{rendered_board}"
 
 
 

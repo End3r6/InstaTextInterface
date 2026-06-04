@@ -121,14 +121,20 @@ class TicTacToeApp(BaseBotApp):
         if game_result == -1:
             return rendered_board
         elif game_result == 0:
+            result = f"Draw\n\n{rendered_board}"
             self.game.board.reset_board()
-            return f"Draw\n\n{rendered_board}"
+
+            return result
         elif game_result == 1:
+            result = f"X won!\n\n{rendered_board}"
             self.game.board.reset_board()
-            return f"X won!\n\n{rendered_board}"
+
+            return result
         elif game_result == 2:
+            result = f"O won!\n\n{rendered_board}"
             self.game.board.reset_board()
-            return f"O won!\n\n{rendered_board}"
+
+            return result
 
 
 

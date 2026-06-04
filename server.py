@@ -1,3 +1,5 @@
+import re
+
 from flask import Flask, request, Response
 from command_system import CommandContext, parse_message
 import os
@@ -71,8 +73,11 @@ def sms():
 
         if args[0] == "quit":
             bot_state = BotState.NEUTRAL
+
+            reply = sms_reply(f"Quitting app: {app_instance.name}")
             app_instance = None
-            return sms_reply(f"Quitting app: {app_instance.name}")
+            
+            return reply
 
         try:
             app_execute_results = app_instance.execute(args, options)

@@ -2,7 +2,6 @@ from base_bot_app import BaseBotApp
 from email_helper import email_file
 from pytubefix import YouTube, Search
 from pytubefix.cli import on_progress
-from swiftshadow.classes import ProxyInterface
 import os
 
 class SongDownloader(BaseBotApp):
@@ -56,7 +55,7 @@ class SongDownloader(BaseBotApp):
         url = results.all[0].watch_url
         print(url)
 
-        yt = YouTube(url, on_progress_callback=on_progress)
+        yt = YouTube(url, token_file="./tokens.json", use_po_token=True, on_progress_callback=on_progress)
         print(yt.title)
 
         ys = yt.streams.get_audio_only()
@@ -64,3 +63,18 @@ class SongDownloader(BaseBotApp):
 
         return path
 
+
+
+def get_song(query):
+    results = Search(query)
+
+    url = results.all[0].watch_url
+    print(url)
+
+    yt = YouTube(url, token_file="./tokens.json", use_po_token=True, on_progress_callback=on_progress)
+    print(yt.title)
+
+    ys = yt.streams.get_audio_only()
+    path = ys.download(output_path="./downloads/")
+
+    return path

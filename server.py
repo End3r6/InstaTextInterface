@@ -19,7 +19,7 @@ MY_PHONE = os.getenv("MY_PHONE")
 bot_state = BotState.NEUTRAL
 
 app_map = {
-    # "song_downloader" : SongDownloader,
+    "song_downloader" : SongDownloader,
     "tic_tac_toe": TicTacToeApp
     }
 
